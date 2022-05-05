@@ -1,9 +1,7 @@
 package ru.job4j.chat.model;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 import javax.persistence.*;
 import java.util.List;
@@ -21,6 +19,9 @@ public class Person {
     @JsonInclude
     @Column(name = "username")
     private String username;
+
+    @Column(name = "password")
+    private String password;
 
     @JsonManagedReference(value = "room-person")
     @OneToMany(mappedBy = "person", cascade = CascadeType.REMOVE)
@@ -44,6 +45,14 @@ public class Person {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Message> getMessages() {

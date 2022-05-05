@@ -9,6 +9,7 @@ import ru.job4j.chat.model.RoomDetails;
 import ru.job4j.chat.service.MessageService;
 import ru.job4j.chat.service.PersonService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,16 +41,16 @@ public class MessageController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Message> create(@RequestBody Message message) {
+    public ResponseEntity<Message> create(@RequestBody Message message, Principal principal) {
         return new ResponseEntity<>(
-                this.messageService.save(message),
+                this.messageService.save(message, principal),
                 HttpStatus.CREATED
         );
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody Message message) {
-        messageService.save(message);
+    public ResponseEntity<Void> update(@RequestBody Message message, Principal principal) {
+        messageService.save(message, principal);
         return ResponseEntity.ok().build();
     }
 

@@ -1,13 +1,16 @@
 package ru.job4j.chat.service;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.job4j.chat.exception.NoSuchPersonFoundException;
 import ru.job4j.chat.exception.NoSuchRoomFoundException;
 import ru.job4j.chat.model.Message;
+import ru.job4j.chat.model.Person;
 import ru.job4j.chat.repository.MessageRepository;
 import ru.job4j.chat.repository.PersonRepository;
 import ru.job4j.chat.repository.RoomRepository;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +27,9 @@ public class MessageService {
         this.roomRepository = roomRepository;
     }
 
-    public Message save(Message message) {
+    public Message save(Message message, Principal principal) {
+        Person person = personRepository.findPersonByUsername(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException(principal.getName() + " not found"));
         personRepository.findById(message.getPerson().getId())
                 .ifPresentOrElse(
                         message::setPerson,
@@ -39,7 +44,11 @@ public class MessageService {
                                 throw new NoSuchRoomFoundException("There is no room with this id");
                         }
                 );
-        messageRepository.save(message);
+        if (person.getId() == message.getPerson().getId()) {
+            messageRepository.save(message);
+        } else {
+            throw new IllegalStateException("Not enough rigths for saving message with this user id");
+        }
         return message;
     }
 
