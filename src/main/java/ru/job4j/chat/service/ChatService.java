@@ -7,6 +7,7 @@ import ru.job4j.chat.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChatService {

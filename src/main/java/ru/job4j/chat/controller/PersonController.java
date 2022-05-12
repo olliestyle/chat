@@ -35,6 +35,9 @@ public class PersonController {
 
     @PostMapping("/")
     public ResponseEntity<Person> create(@RequestBody Person person) {
+        if (person.getUsername() == null || person.getPassword() == null) {
+            throw new NullPointerException("Username and password mustn't be empty");
+        }
         return new ResponseEntity<>(
                 personService.save(person),
                 HttpStatus.CREATED

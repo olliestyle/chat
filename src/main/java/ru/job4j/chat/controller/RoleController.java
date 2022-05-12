@@ -35,6 +35,9 @@ public class RoleController {
 
     @PostMapping("/")
     public ResponseEntity<Role> create(@RequestBody Role role) {
+        if (role.getName() == null) {
+            throw new NullPointerException("Name of role mustn't be empty");
+        }
         return new ResponseEntity<>(
                 roleService.save(role),
                 HttpStatus.CREATED

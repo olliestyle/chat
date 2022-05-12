@@ -35,6 +35,9 @@ public class RoomController {
 
     @PostMapping("/")
     public ResponseEntity<Room> create(@RequestBody Room room) {
+        if (room.getName() == null) {
+            throw new NullPointerException("Name of room mustn't be empty");
+        }
         return new ResponseEntity<>(
                 roomService.save(room),
                 HttpStatus.CREATED
