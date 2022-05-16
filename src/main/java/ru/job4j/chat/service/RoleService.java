@@ -1,6 +1,7 @@
 package ru.job4j.chat.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.chat.model.Role;
 import ru.job4j.chat.repository.RoleRepository;
 
@@ -26,6 +27,11 @@ public class RoleService {
 
     public Role save(Role role) {
         return roleRepository.save(role);
+    }
+
+    @Transactional
+    public void update(Role role) {
+        roleRepository.update(role.getId(), role.getName());
     }
 
     public void delete(int id) {

@@ -3,8 +3,10 @@ package ru.job4j.chat.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.chat.dto.RoomNameDTO;
 import ru.job4j.chat.model.Room;
 import ru.job4j.chat.service.RoomService;
+import ru.job4j.chat.util.Mapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +16,11 @@ import java.util.Optional;
 public class RoomController {
 
     private final RoomService roomService;
+    private final Mapper mapper;
 
-    public RoomController(RoomService roomService) {
+    public RoomController(RoomService roomService, Mapper mapper) {
         this.roomService = roomService;
+        this.mapper = mapper;
     }
 
     @GetMapping("/")
@@ -47,6 +51,12 @@ public class RoomController {
     @PutMapping("/")
     public ResponseEntity<Void> update(@RequestBody Room room) {
         roomService.save(room);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    public ResponseEntity<Void> update(@RequestBody RoomNameDTO roomNameDTO) {
+        roomService.update(mapper.toRoom(roomNameDTO));
         return ResponseEntity.ok().build();
     }
 

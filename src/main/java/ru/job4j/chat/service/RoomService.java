@@ -1,6 +1,7 @@
 package ru.job4j.chat.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.chat.model.Room;
 import ru.job4j.chat.repository.RoomRepository;
 
@@ -26,6 +27,11 @@ public class RoomService {
 
     public Room save(Room room) {
         return roomRepository.save(room);
+    }
+
+    @Transactional
+    public void update(Room room) {
+        roomRepository.update(room.getId(), room.getName());
     }
 
     public void delete(int id) {

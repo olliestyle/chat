@@ -6,10 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.chat.dto.MessageTextDTO;
 import ru.job4j.chat.exception.NoSuchPersonFoundException;
 import ru.job4j.chat.model.Message;
 import ru.job4j.chat.service.MessageService;
 import ru.job4j.chat.service.PersonService;
+import ru.job4j.chat.util.Mapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,15 +28,15 @@ public class MessageController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageController.class.getSimpleName());
 
     private final MessageService messageService;
-    private final PersonService personService;
     private final ObjectMapper objectMapper;
+    private final Mapper mapper;
 
 
     public MessageController(MessageService messageService,
-                             PersonService personService,
+                             Mapper mapper,
                              ObjectMapper objectMapper) {
         this.messageService = messageService;
-        this.personService = personService;
+        this.mapper = mapper;
         this.objectMapper = objectMapper;
     }
 
@@ -63,6 +65,12 @@ public class MessageController {
     @PutMapping("/")
     public ResponseEntity<Void> update(@RequestBody Message message, Principal principal) {
         messageService.save(message, principal);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    public ResponseEntity<Void> update(@RequestBody MessageTextDTO messageTextDTO) {
+        messageService.update(mapper.toMessage(messageTextDTO));
         return ResponseEntity.ok().build();
     }
 

@@ -1,6 +1,7 @@
 package ru.job4j.chat.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.chat.model.Person;
 import ru.job4j.chat.repository.PersonRepository;
 
@@ -30,6 +31,11 @@ public class PersonService {
 
     public Person save(Person person) {
         return personRepository.save(person);
+    }
+
+    @Transactional
+    public void update(Person person) {
+        personRepository.update(person.getId(), person.getUsername());
     }
 
     public void delete(int id) {

@@ -2,6 +2,8 @@ package ru.job4j.chat.service;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.chat.exception.NoSuchPersonFoundException;
 import ru.job4j.chat.exception.NoSuchRoomFoundException;
 import ru.job4j.chat.model.Message;
@@ -50,6 +52,11 @@ public class MessageService {
             throw new IllegalStateException("Not enough rigths for saving message with this user id");
         }
         return message;
+    }
+
+    @Transactional
+    public void update(Message message) {
+        messageRepository.update(message.getId(), message.getTextMessage());
     }
 
     public List<Message> findAll() {
