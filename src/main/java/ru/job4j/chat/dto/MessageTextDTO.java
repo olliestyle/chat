@@ -1,14 +1,20 @@
 package ru.job4j.chat.dto;
 
+import ru.job4j.chat.util.Operation;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 public class MessageTextDTO {
 
-    private int id;
+    @NotNull(message = "id must be non null", groups = Operation.OnUpdate.class)
+    private Integer id;
 
+    @NotBlank(message = "text message mustn't be blank", groups = Operation.OnUpdate.class)
     private String textMessage;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -16,7 +22,7 @@ public class MessageTextDTO {
         return textMessage;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

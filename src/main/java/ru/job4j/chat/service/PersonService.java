@@ -21,7 +21,7 @@ public class PersonService {
         return (List<Person>) personRepository.findAll();
     }
 
-    public Optional<Person> findById(int id) {
+    public Optional<Person> findById(Integer id) {
         return personRepository.findById(id);
     }
 
@@ -38,7 +38,7 @@ public class PersonService {
         personRepository.update(person.getId(), person.getUsername());
     }
 
-    public void delete(int id) {
+    public void delete(Integer id) {
         personRepository.delete(personRepository.findById(id).get());
     }
 

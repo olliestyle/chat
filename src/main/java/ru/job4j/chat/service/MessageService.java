@@ -63,11 +63,11 @@ public class MessageService {
         return (List<Message>) messageRepository.findAll();
     }
 
-    public Optional<Message> findById(int id) {
+    public Optional<Message> findById(Integer id) {
         return messageRepository.findById(id);
     }
 
-    public void delete(int id) {
+    public void delete(Integer id) {
         messageRepository.delete(messageRepository.findById(id).get());
     }
 }

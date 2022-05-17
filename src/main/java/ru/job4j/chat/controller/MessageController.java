@@ -5,16 +5,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.chat.dto.MessageTextDTO;
 import ru.job4j.chat.exception.NoSuchPersonFoundException;
 import ru.job4j.chat.model.Message;
 import ru.job4j.chat.service.MessageService;
-import ru.job4j.chat.service.PersonService;
 import ru.job4j.chat.util.Mapper;
+import ru.job4j.chat.util.Operation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
@@ -23,6 +27,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/message")
+@Validated
 public class MessageController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageController.class.getSimpleName());
@@ -55,7 +60,8 @@ public class MessageController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Message> create(@RequestBody Message message, Principal principal) {
+    @Validated(Operation.OnCreate.class)
+    public ResponseEntity<Message> create(@Valid @RequestBody Message message, Principal principal) {
         return new ResponseEntity<>(
                 this.messageService.save(message, principal),
                 HttpStatus.CREATED
@@ -63,19 +69,20 @@ public class MessageController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody Message message, Principal principal) {
+    @Validated(Operation.OnUpdate.class)
+    public ResponseEntity<Void> update(@Valid @RequestBody Message message, Principal principal) {
         messageService.save(message, principal);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/")
-    public ResponseEntity<Void> update(@RequestBody MessageTextDTO messageTextDTO) {
+    public ResponseEntity<Void> update(@NotNull @Validated(Operation.OnUpdate.class) @RequestBody MessageTextDTO messageTextDTO) {
         messageService.update(mapper.toMessage(messageTextDTO));
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@Min(value = 1, message = "id must be >= 1") @PathVariable Integer id) {
         messageService.delete(id);
         return ResponseEntity.ok().build();
     }

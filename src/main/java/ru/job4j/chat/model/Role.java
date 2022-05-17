@@ -1,8 +1,12 @@
 package ru.job4j.chat.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import ru.job4j.chat.util.Operation;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,20 +16,26 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Null(message = "id must be null, when create new role", groups = Operation.OnCreate.class)
+    @NotNull(message = "id must be non null", groups = Operation.OnUpdate.class)
+    private Integer id;
 
     @Column(name = "name")
+    @NotNull(message = "name must be not null when create", groups = Operation.OnCreate.class)
+    @NotNull(message = "name must be not null when update", groups = Operation.OnUpdate.class)
+    @NotBlank(message = "name mustn't be blank when create", groups = Operation.OnCreate.class)
+    @NotBlank(message = "name mustn't be blank when update", groups = Operation.OnUpdate.class)
     private String name;
 
     @JsonManagedReference(value = "roomDetails-role")
     @OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE)
     private List<RoomDetails> roomDetailsList;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

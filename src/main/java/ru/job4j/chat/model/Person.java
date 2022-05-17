@@ -2,8 +2,12 @@ package ru.job4j.chat.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import ru.job4j.chat.util.Operation;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -14,13 +18,23 @@ public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Null(message = "id must be null, when create new person", groups = Operation.OnCreate.class)
+    @NotNull(message = "id must be non null", groups = Operation.OnUpdate.class)
+    private Integer id;
 
     @JsonInclude
     @Column(name = "username")
+    @NotNull(message = "username must be not null when create", groups = Operation.OnCreate.class)
+    @NotNull(message = "username must be not null when update", groups = Operation.OnUpdate.class)
+    @NotBlank(message = "username mustn't be blank when create", groups = Operation.OnCreate.class)
+    @NotBlank(message = "username mustn't be blank when update", groups = Operation.OnUpdate.class)
     private String username;
 
     @Column(name = "password")
+    @NotNull(message = "password must be not null when create", groups = Operation.OnCreate.class)
+    @NotNull(message = "password must be not null when update", groups = Operation.OnUpdate.class)
+    @NotBlank(message = "password mustn't be blank when create", groups = Operation.OnCreate.class)
+    @NotBlank(message = "password mustn't be blank when update", groups = Operation.OnUpdate.class)
     private String password;
 
     @JsonManagedReference(value = "room-person")
@@ -31,11 +45,11 @@ public class Person {
     @OneToMany(mappedBy = "person", cascade = CascadeType.REMOVE)
     private Set<RoomDetails> roomDetails;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

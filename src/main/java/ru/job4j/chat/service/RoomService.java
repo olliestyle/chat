@@ -21,7 +21,7 @@ public class RoomService {
         return (List<Room>) roomRepository.findAll();
     }
 
-    public Optional<Room> findById(int id) {
+    public Optional<Room> findById(Integer id) {
         return roomRepository.findById(id);
     }
 
@@ -34,7 +34,7 @@ public class RoomService {
         roomRepository.update(room.getId(), room.getName());
     }
 
-    public void delete(int id) {
+    public void delete(Integer id) {
         roomRepository.delete(roomRepository.findById(id).get());
     }
 

@@ -21,7 +21,7 @@ public class RoleService {
         return (List<Role>) roleRepository.findAll();
     }
 
-    public Optional<Role> findById(int id) {
+    public Optional<Role> findById(Integer id) {
         return roleRepository.findById(id);
     }
 
@@ -34,7 +34,7 @@ public class RoleService {
         roleRepository.update(role.getId(), role.getName());
     }
 
-    public void delete(int id) {
+    public void delete(Integer id) {
         roleRepository.delete(roleRepository.findById(id).get());
     }
 }
