@@ -23,4 +23,30 @@ Java 11 SpringBoot, SpringJPA, PostgreSQL.
 - получать все сообщения в комнате
 <br />
 - получать список всех пользователей в комнате
+<br /><br />
+Сборка и запуск проекта:
+1. Собираем jar
+<br />
+```
+mvn install Dmaven.test.skip=true
+```
+<br />
+2. Собираем образ приложения:
+<br />
+<br />
+
+```
+docker build -t chat .
+```
+<br />
+3. Для базы данных используем образ postgres:latest
+<br />
+4. Запускаем docker-compose
+<br />
+<br />
+
+```
+docker-compose up
+```
+<br />
 
